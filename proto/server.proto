@@ -15,4 +15,5 @@ message DeviceList {
 }
 
 service SonosService {
+  rpc ListDevices (Empty) returns (DeviceList) {};
 }

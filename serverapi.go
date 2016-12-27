@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/brotherlogic/goserver"
+	"github.com/ianr0bkny/go-sonos/ssdp"
 	"google.golang.org/grpc"
 
 	pb "github.com/brotherlogic/sonosrpc/proto"
@@ -15,12 +15,7 @@ import (
 // Server the configuration for the syncer
 type Server struct {
 	*goserver.GoServer
-	retr       Retriever
-	marshaller jsonUnmarshaller
-}
-
-func (jsonUnmarshaller prodUnmarshaller) Unmarshal(inp []byte, v interface{}) error {
-	return json.Unmarshal(inp, v)
+	mgr deviceManager
 }
 
 // HTTPRetriever pulls http pages
@@ -45,7 +40,7 @@ func (s Server) DoRegister(server *grpc.Server) {
 
 // InitServer builds an initial server
 func InitServer() Server {
-	server := Server{&goserver.GoServer{}, &HTTPRetriever{}, &prodUnmarshaller{}}
+	server := Server{&goserver.GoServer{}, ssdp.MakeManager()}
 	server.Register = server
 
 	return server
