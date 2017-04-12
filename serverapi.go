@@ -38,6 +38,11 @@ func (s Server) DoRegister(server *grpc.Server) {
 	pb.RegisterSonosServiceServer(server, &s)
 }
 
+// ReportHealth reports health of the server
+func (s Server) ReportHealth() bool {
+	return true
+}
+
 // InitServer builds an initial server
 func InitServer() Server {
 	server := Server{&goserver.GoServer{}, ssdp.MakeManager()}
